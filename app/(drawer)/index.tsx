@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { FlashList } from "@shopify/flash-list";
 import { Send } from 'lucide-react-native';
@@ -9,6 +9,10 @@ export default function ChatScreen() {
   const { messages, addMessage, isLoading, generateAiResponse } = useChatStore();
   const [inputText, setInputText] = useState('');
   const listRef = useRef<FlashList<any>>(null);
+
+  // Inversion de la liste pour l'affichage : [Plus récent, ..., Plus ancien]
+  // La FlashList 'inverted' affichera le premier élément (le plus récent) en bas.
+  const reversedMessages = useMemo(() => [...messages].reverse(), [messages]);
 
   const handleSend = async () => {
     if (!inputText.trim()) return;
@@ -29,7 +33,7 @@ export default function ChatScreen() {
         {/* Chat List */}
         <FlashList
           ref={listRef}
-          data={messages}
+          data={reversedMessages}
           renderItem={({ item }) => <ChatBubble message={item} />}
           estimatedItemSize={100}
           inverted

@@ -33,19 +33,20 @@ export const useChatStore = create<ChatState>()(
       addMessage: (message) =>
         set((state) => ({
           messages: [
+            ...state.messages, // Garde l'ordre chronologique (anciens d'abord)
             {
               ...message,
               id: Math.random().toString(36).substring(7),
               createdAt: Date.now(),
             },
-            ...state.messages, // Prepend for FlashList inverted
           ],
         })),
       setLoading: (loading) => set({ isLoading: loading }),
       clearChat: () => set({ messages: [] }),
       generateAiResponse: async () => {
         const { messages, addMessage, setLoading } = get();
-        const lastUserMessage = messages[0];
+        // Dans un ordre chronologique, le dernier message est à la fin du tableau
+        const lastUserMessage = messages[messages.length - 1];
 
         if (!lastUserMessage || lastUserMessage.role !== 'user') return;
 
