@@ -10,8 +10,10 @@ export default function ChatScreen() {
   const [inputText, setInputText] = useState('');
   const listRef = useRef<FlashList<any>>(null);
 
-  // Inversion de la liste pour l'affichage : [Plus récent, ..., Plus ancien]
-  // La FlashList 'inverted' affichera le premier élément (le plus récent) en bas.
+  // LOGIQUE D'AFFICHAGE (Style WhatsApp) :
+  // 1. Le store garde l'ordre chronologique : [Message 1, Message 2, Message 3 (Récent)]
+  // 2. On inverse pour l'affichage : [Message 3 (Récent), Message 2, Message 1]
+  // 3. FlashList 'inverted' affiche le premier élément du tableau (index 0) tout en bas de l'écran.
   const reversedMessages = useMemo(() => [...messages].reverse(), [messages]);
 
   const handleSend = async () => {
@@ -20,10 +22,10 @@ export default function ChatScreen() {
     const userText = inputText.trim();
     setInputText('');
 
-    // Add user message
+    // Ajout au store (ajout à la fin de la liste chronologique)
     addMessage({ role: 'user', content: userText });
     
-    // Trigger AI response
+    // Déclenchement de l'IA
     await generateAiResponse();
   };
 
@@ -37,13 +39,15 @@ export default function ChatScreen() {
           renderItem={({ item }) => <ChatBubble message={item} />}
           estimatedItemSize={100}
           inverted
-          contentContainerStyle={{ padding: 16 }}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 16 }}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         />
 
         {/* Input Area */}
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          // Offset de 100 pour compenser le Header du Drawer + Status Bar sur iOS
           keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
         >
           <View className="p-4 bg-white border-t border-gray-100">
