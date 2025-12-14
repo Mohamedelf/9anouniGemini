@@ -60,7 +60,7 @@ export default function ChatScreen() {
                 onPress={handleSend}
                 disabled={!inputText.trim() || isLoading}
                 className={`w-10 h-10 rounded-full items-center justify-center mb-1 ${
-                  inputText.trim() ? 'bg-blue-600' : 'bg-gray-300'
+                  inputText.trim() ? 'bg-primary' : 'bg-gray-300'
                 }`}
               >
                 <Send size={20} color="white" />
