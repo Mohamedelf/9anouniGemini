@@ -1,40 +1,42 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
-import { MMKV } from 'react-native-mmkv';
-
-let mmkv: MMKV | null = null;
-
-if (Platform.OS !== 'web') {
-  try {
-    mmkv = new MMKV();
-  } catch (e) {
-    console.error("MMKV initialization failed:", e);
-  }
-}
 
 export const storage = {
-  getString: (key: string) => {
+  getString: async (key: string) => {
     if (Platform.OS === 'web') {
       if (typeof localStorage === 'undefined') return null;
       return localStorage.getItem(key);
     }
-    return mmkv?.getString(key) ?? null;
+    try {
+      return await AsyncStorage.getItem(key);
+    } catch (e) {
+      console.error('Error getting item:', e);
+      return null;
+    }
   },
-  set: (key: string, value: string | boolean | number) => {
+  set: async (key: string, value: string | boolean | number) => {
+    const stringValue = String(value);
     if (Platform.OS === 'web') {
       if (typeof localStorage === 'undefined') return;
-      localStorage.setItem(key, String(value));
+      localStorage.setItem(key, stringValue);
       return;
     }
-    if (typeof value === 'string') mmkv?.set(key, value);
-    else if (typeof value === 'boolean') mmkv?.set(key, value);
-    else if (typeof value === 'number') mmkv?.set(key, value);
+    try {
+      await AsyncStorage.setItem(key, stringValue);
+    } catch (e) {
+      console.error('Error setting item:', e);
+    }
   },
-  delete: (key: string) => {
+  delete: async (key: string) => {
     if (Platform.OS === 'web') {
       if (typeof localStorage === 'undefined') return;
       localStorage.removeItem(key);
       return;
     }
-    mmkv?.delete(key);
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (e) {
+      console.error('Error removing item:', e);
+    }
   }
 };
