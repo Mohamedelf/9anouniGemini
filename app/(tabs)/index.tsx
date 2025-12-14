@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, Text } from 'react-native';
 import { FlashList } from "@shopify/flash-list";
 import { Send, Sparkles } from 'lucide-react-native';
 import { useChatStore } from '../../store/chatStore';
 import { ChatBubble } from '../../components/ChatBubble';
 
 export default function ChatScreen() {
-  const { messages, addMessage, isLoading, setLoading } = useChatStore();
+  const { messages, addMessage, isLoading, generateAiResponse } = useChatStore();
   const [inputText, setInputText] = useState('');
   const listRef = useRef<FlashList<any>>(null);
 
@@ -18,16 +18,9 @@ export default function ChatScreen() {
 
     // Add user message
     addMessage({ role: 'user', content: userText });
-    setLoading(true);
-
-    // Simulate AI delay and typing
-    setTimeout(() => {
-      setLoading(false);
-      addMessage({
-        role: 'assistant',
-        content: `Je suis une IA mockée pour le moment. Vous avez dit : "${userText}". Je serai bientôt connecté au backend Supabase !`,
-      });
-    }, 1500);
+    
+    // Trigger AI response
+    await generateAiResponse();
   };
 
   return (
@@ -40,7 +33,7 @@ export default function ChatScreen() {
               <Sparkles size={18} color="#007AFF" />
             </View>
             <View>
-              {/* Note: In React Native Text must be inside Text or View */}
+              <Text className="text-lg font-bold text-gray-900">9anouni</Text>
             </View>
           </View>
         </View>

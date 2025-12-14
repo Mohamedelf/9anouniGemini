@@ -15,6 +15,7 @@ interface ChatState {
   addMessage: (message: Omit<Message, 'id' | 'createdAt'>) => void;
   setLoading: (loading: boolean) => void;
   clearChat: () => void;
+  generateAiResponse: () => Promise<void>;
 }
 
 const zustandStorage = {
@@ -31,7 +32,7 @@ const zustandStorage = {
 
 export const useChatStore = create<ChatState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       messages: [
         {
           id: 'welcome',
@@ -54,6 +55,24 @@ export const useChatStore = create<ChatState>()(
         })),
       setLoading: (loading) => set({ isLoading: loading }),
       clearChat: () => set({ messages: [] }),
+      generateAiResponse: async () => {
+        const { messages, addMessage, setLoading } = get();
+        const lastUserMessage = messages[0];
+
+        if (!lastUserMessage || lastUserMessage.role !== 'user') return;
+
+        setLoading(true);
+
+        // Simulation d'appel API (Placeholder pour n8n)
+        // TODO: Remplacer ce setTimeout par un fetch vers votre webhook n8n
+        setTimeout(() => {
+          addMessage({
+            role: 'assistant',
+            content: "Ceci est une réponse simulée (Mock). L'application est prête à être connectée à votre workflow n8n. Une fois le backend configuré, les réponses juridiques réelles apparaîtront ici.",
+          });
+          setLoading(false);
+        }, 1500); // Délai artificiel de 1.5s pour simuler le réseau
+      },
     }),
     {
       name: 'chat-storage',
