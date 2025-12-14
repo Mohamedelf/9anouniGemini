@@ -18,18 +18,6 @@ interface ChatState {
   generateAiResponse: () => Promise<void>;
 }
 
-const zustandStorage = {
-  setItem: (name: string, value: string) => {
-    return storage.set(name, value);
-  },
-  getItem: (name: string) => {
-    return storage.getString(name);
-  },
-  removeItem: (name: string) => {
-    return storage.delete(name);
-  },
-};
-
 export const useChatStore = create<ChatState>()(
   persist(
     (set, get) => ({
@@ -76,7 +64,7 @@ export const useChatStore = create<ChatState>()(
     }),
     {
       name: 'chat-storage',
-      storage: createJSONStorage(() => zustandStorage),
+      storage: createJSONStorage(() => storage),
     }
   )
 );
