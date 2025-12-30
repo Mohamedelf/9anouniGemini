@@ -8,7 +8,7 @@ import { ChatBubble } from '../../components/ChatBubble';
 export default function ChatScreen() {
   const { messages, addMessage, isLoading, generateAiResponse } = useChatStore();
   const [inputText, setInputText] = useState('');
-  const listRef = useRef<FlashList<any>>(null);
+  const listRef = useRef<any>(null);
 
   const handleSend = async () => {
     if (!inputText.trim()) return;
@@ -18,7 +18,7 @@ export default function ChatScreen() {
 
     // Add user message
     addMessage({ role: 'user', content: userText });
-    
+
     // Trigger AI response
     await generateAiResponse();
   };
@@ -43,6 +43,7 @@ export default function ChatScreen() {
           ref={listRef}
           data={messages}
           renderItem={({ item }) => <ChatBubble message={item} />}
+          // @ts-ignore
           estimatedItemSize={100}
           inverted
           contentContainerStyle={{ padding: 16 }}
@@ -67,9 +68,8 @@ export default function ChatScreen() {
               <TouchableOpacity
                 onPress={handleSend}
                 disabled={!inputText.trim() || isLoading}
-                className={`w-10 h-10 rounded-full items-center justify-center mb-1 ${
-                  inputText.trim() ? 'bg-blue-600' : 'bg-gray-300'
-                }`}
+                className={`w-10 h-10 rounded-full items-center justify-center mb-1 ${inputText.trim() ? 'bg-blue-600' : 'bg-gray-300'
+                  }`}
               >
                 <Send size={20} color="white" />
               </TouchableOpacity>

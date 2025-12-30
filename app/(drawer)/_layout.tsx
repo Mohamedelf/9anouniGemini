@@ -8,14 +8,16 @@ export default function DrawerLayout() {
       <Drawer
         screenOptions={{
           headerShown: true,
-          headerTintColor: '#1F2937', // Gray-900
+          drawerType: 'back',
+          headerTintColor: '#1F2937',
           headerTitleStyle: {
             fontWeight: 'bold',
           },
           drawerActiveTintColor: '#007AFF',
           drawerInactiveTintColor: '#6B7280',
           drawerLabelStyle: {
-            marginLeft: -20,
+            // marginLeft: -20, // Caused overlap
+            fontFamily: 'Inter-Medium', // Example if needed, or just leave empty
           },
         }}
       >
