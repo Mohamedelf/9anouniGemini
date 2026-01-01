@@ -27,10 +27,10 @@ export default function HistoryScreen() {
   const sortedConversations = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
       <View className="flex-1 px-4 pt-4">
         <View className="flex-row items-center justify-between mb-4">
-          <Text className="text-2xl font-bold text-gray-900">Historique</Text>
+          <Text className="text-2xl font-bold text-gray-900 dark:text-white">Historique</Text>
           <TouchableOpacity
             onPress={handleNewChat}
             className="flex-row items-center bg-primary px-3 py-2 rounded-lg"
@@ -64,17 +64,17 @@ export default function HistoryScreen() {
                   onPress={() => handleSelectConversation(item.id)}
                   className={clsx(
                     "flex-row items-center justify-between p-4 mb-2 rounded-xl border",
-                    isActive ? "bg-primary/10 border-primary" : "bg-white border-gray-100"
+                    isActive ? "bg-primary/10 border-primary" : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"
                   )}
                 >
                   <View className="flex-1 mr-4">
-                    <Text className={clsx("font-semibold mb-1", isActive ? "text-primary" : "text-gray-900")} numberOfLines={1}>
+                    <Text className={clsx("font-semibold mb-1", isActive ? "text-primary" : "text-gray-900 dark:text-gray-100")} numberOfLines={1}>
                       {item.title}
                     </Text>
-                    <Text className="text-gray-500 text-sm" numberOfLines={1}>
+                    <Text className="text-gray-500 dark:text-gray-400 text-sm" numberOfLines={1}>
                       {snippet}
                     </Text>
-                    <Text className="text-gray-400 text-xs mt-1">
+                    <Text className="text-gray-400 dark:text-gray-500 text-xs mt-1">
                       {new Date(item.updatedAt).toLocaleDateString()} {new Date(item.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </Text>
                   </View>

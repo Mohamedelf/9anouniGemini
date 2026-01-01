@@ -6,7 +6,11 @@ import { ChatBubble } from '../../components/ChatBubble';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useHeaderHeight } from '@react-navigation/elements';
 
+import { useColorScheme } from 'nativewind';
+
 export default function ChatScreen() {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === 'dark';
   const {
     addMessage,
     isLoading,
@@ -39,19 +43,27 @@ export default function ChatScreen() {
     });
   };
 
-  // Add "New Chat" button to header
+  // Add Header buttons
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+          className="ml-4 p-1"
+        >
+          <Menu size={24} color={isDark ? "#FFFFFF" : "#1F2937"} />
+        </TouchableOpacity>
+      ),
       headerRight: () => (
         <TouchableOpacity
           onPress={handleNewChat}
           className="mr-4 p-1"
         >
-          <Plus size={24} color="#1F2937" />
+          <Plus size={24} color={isDark ? "#FFFFFF" : "#1F2937"} />
         </TouchableOpacity>
       ),
     });
-  }, [navigation, createConversation]); // added handleNewChat to deps strictly speaking, but it's stable if defined inside or needs useCallback. logic inside relies on refs mostly.
+  }, [navigation, createConversation, isDark]);
 
   // Ensure conversation exists on mount
   useEffect(() => {
@@ -88,7 +100,7 @@ export default function ChatScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
       {/* Custom Header with Drawer Toggle could go here if not using default header */}
 
       <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
@@ -104,7 +116,7 @@ export default function ChatScreen() {
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-10">
-              <Text className="text-gray-400">Commencez une nouvelle conversation</Text>
+              <Text className="text-gray-400 dark:text-gray-500">Commencez une nouvelle conversation</Text>
             </View>
           }
         />
@@ -115,10 +127,10 @@ export default function ChatScreen() {
           // Offset de 100 pour compenser le Header du Drawer + Status Bar sur iOS
           keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
         >
-          <View className="p-4 bg-white border-t border-gray-100">
-            <View className="flex-row items-end gap-2 bg-gray-50 p-2 rounded-2xl border border-gray-200">
+          <View className="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+            <View className="flex-row items-end gap-2 bg-gray-50 dark:bg-gray-800 p-2 rounded-2xl border border-gray-200 dark:border-gray-700">
               <TextInput
-                className="flex-1 text-base text-gray-900 max-h-32 px-2 py-2"
+                className="flex-1 text-base text-gray-900 dark:text-white max-h-32 px-2 py-2"
                 placeholder="Posez votre question juridique..."
                 placeholderTextColor="#9CA3AF"
                 multiline
@@ -128,13 +140,13 @@ export default function ChatScreen() {
               <TouchableOpacity
                 onPress={handleSend}
                 disabled={!inputText.trim() || isLoading}
-                className={`w-10 h-10 rounded-full items-center justify-center mb-1 ${inputText.trim() ? 'bg-primary' : 'bg-gray-300'
+                className={`w-10 h-10 rounded-full items-center justify-center mb-1 ${inputText.trim() ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
                   }`}
               >
                 <Send size={20} color="white" />
               </TouchableOpacity>
             </View>
-            <Text className="text-[10px] text-center text-gray-400 mt-2">
+            <Text className="text-[10px] text-center text-gray-400 dark:text-gray-500 mt-2">
               Ceci n'est PAS un conseil juridique. L'IA peut se tromper. Consultez un avocat.
             </Text>
           </View>
