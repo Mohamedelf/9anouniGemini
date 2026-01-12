@@ -1,14 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, SafeAreaView, Text } from 'react-native';
 import { FlashList } from "@shopify/flash-list";
 import { Send, Sparkles } from 'lucide-react-native';
 import { useChatStore } from '../../store/chatStore';
 import { ChatBubble } from '../../components/ChatBubble';
+import { LoadingBubble } from '../../components/LoadingBubble';
 
 export default function ChatScreen() {
   const { messages, addMessage, isLoading, generateAiResponse } = useChatStore();
   const [inputText, setInputText] = useState('');
-  const listRef = useRef<any>(null);
+  const listRef = useRef<FlashList<any>>(null);
+
+  // Inverted FlashList means index 0 is at the bottom.
+  // We want the Newest message to be at index 0.
+  // The store keeps messages in chronological order [Old -> New].
+  // So we simply reverse them here for display [New -> Old].
+  const reversedMessages = useMemo(() => [...messages].reverse(), [messages]);
+
+  useEffect(() => {
+    // Scroll to bottom (offset 0 in inverted list) when new message arrives
+    if (reversedMessages.length > 0) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [reversedMessages.length, isLoading]);
 
   const handleSend = async () => {
     if (!inputText.trim()) return;
@@ -41,11 +55,12 @@ export default function ChatScreen() {
         {/* Chat List */}
         <FlashList
           ref={listRef}
-          data={messages}
+          data={reversedMessages}
           renderItem={({ item }) => <ChatBubble message={item} />}
           // @ts-ignore
           estimatedItemSize={100}
           inverted
+          ListHeaderComponent={isLoading ? <LoadingBubble /> : null}
           contentContainerStyle={{ padding: 16 }}
           showsVerticalScrollIndicator={false}
         />
