@@ -9,13 +9,13 @@ import { useEffect } from "react";
 export default function RootLayout() {
   const { setColorScheme } = useColorScheme();
 
-  useEffect(() => {
-    setColorScheme("light");
-  }, []);
+  // useEffect(() => {
+  //   setColorScheme("dark");
+  // }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View className="flex-1 bg-white">
+      <View className="flex-1 bg-white dark:bg-gray-950">
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
