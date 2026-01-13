@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, User, Calendar, CheckCircle, AlertCircle } from 'lucide-react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Animated, {
     useSharedValue,
@@ -39,6 +40,7 @@ export default function AuthScreen() {
     // Validation State
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
     // Animation values
     const indicatorPosition = useSharedValue(0);
@@ -384,10 +386,43 @@ export default function AuthScreen() {
                             </Animated.View>
                         )}
 
+                        {/* Terms Checkbox (Sign Up only) */}
+                        {!isLogin && (
+                            <View className="flex-row items-center mb-4 px-1 mt-6">
+                                <Pressable
+                                    onPress={() => setHasAcceptedTerms(!hasAcceptedTerms)}
+                                    className="mr-3"
+                                >
+                                    <MaterialCommunityIcons
+                                        name={hasAcceptedTerms ? "checkbox-marked" : "checkbox-blank-outline"}
+                                        size={24}
+                                        color={hasAcceptedTerms ? "#2563EB" : "#9CA3AF"} // blue-600 : gray-400
+                                    />
+                                </Pressable>
+                                <Text className="flex-1 text-xs text-gray-500 dark:text-gray-400">
+                                    J'accepte les{' '}
+                                    <Text
+                                        className="text-blue-600 dark:text-blue-500 underline"
+                                        onPress={() => Alert.alert('Lien cliqué', 'Conditions Générales')}
+                                    >
+                                        Conditions Générales
+                                    </Text>
+                                    {' '}et la{' '}
+                                    <Text
+                                        className="text-blue-600 dark:text-blue-500 underline"
+                                        onPress={() => Alert.alert('Lien cliqué', 'Politique de Confidentialité')}
+                                    >
+                                        Politique de Confidentialité
+                                    </Text>.
+                                </Text>
+                            </View>
+                        )}
+
                         {/* Action Button */}
                         <TouchableOpacity
-                            className="bg-blue-600 h-14 rounded-xl items-center justify-center flex-row mt-10 shadow-blue-500/30 shadow-lg active:bg-blue-700"
+                            className={`bg-blue-600 h-14 rounded-xl items-center justify-center flex-row mt-10 shadow-blue-500/30 shadow-lg active:bg-blue-700 ${(!isLogin && !hasAcceptedTerms) ? 'opacity-50' : 'opacity-100'}`}
                             onPress={handleSubmit}
+                            disabled={!isLogin && !hasAcceptedTerms}
                         >
                             <Text className="text-white font-bold text-lg mr-2">
                                 {isLogin ? 'Log In' : 'Sign Up'}
@@ -395,28 +430,7 @@ export default function AuthScreen() {
                             <ArrowRight size={20} color="white" strokeWidth={2.5} />
                         </TouchableOpacity>
 
-                        {/* Legal Links (Sign Up only) */}
-                        {!isLogin && (
-                            <View className="mt-6">
-                                <Text className="text-xs text-center text-gray-500 dark:text-gray-400">
-                                    En vous inscrivant, vous acceptez nos{' '}
-                                    <Text
-                                        className="text-blue-600 dark:text-blue-500 underline"
-                                        onPress={() => Alert.alert('Lien cliqué', 'Conditions Générales d\'Utilisation')}
-                                    >
-                                        Conditions Générales d'Utilisation
-                                    </Text>
-                                    {' '}et notre{' '}
-                                    <Text
-                                        className="text-blue-600 dark:text-blue-500 underline"
-                                        onPress={() => Alert.alert('Lien cliqué', 'Politique de Confidentialité')}
-                                    >
-                                        Politique de Confidentialité
-                                    </Text>
-                                    .
-                                </Text>
-                            </View>
-                        )}
+
                     </Animated.View>
 
                 </ScrollView>
