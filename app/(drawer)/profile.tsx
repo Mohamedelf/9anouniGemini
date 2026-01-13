@@ -1,38 +1,25 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, Switch, Alert, TextInput, Pressable, Platform } from "react-native";
-import { User, Moon, Bell, Globe, LogOut, Trash2, CreditCard, ChevronRight, Calendar } from 'lucide-react-native';
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, Switch, Alert, Pressable, Platform } from "react-native";
+import { User, Moon, Bell, Globe, LogOut, Trash2, CreditCard, ChevronRight, Calendar, Mail } from 'lucide-react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { useRouter } from 'expo-router';
 import clsx from 'clsx';
 import { useColorScheme } from 'nativewind';
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const { colorScheme, toggleColorScheme } = useColorScheme();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [language, setLanguage] = useState('fr'); // 'fr' or 'ar'
   const isDark = colorScheme === 'dark';
 
-  // Form State
-  const [firstName, setFirstName] = useState('Mohamed');
-  const [lastName, setLastName] = useState('El Fene');
-  const [dob, setDob] = useState('01 / 01 / 1990');
-  const [date, setDate] = useState(new Date(1990, 0, 1));
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // Dummy Data for Display (View Only)
+  const firstName = 'Mohamed';
+  const lastName = 'El Fene';
+  const dob = '01 / 01 / 1990';
+  const email = 'john.doe@example.com'; // Keeping original dummy email or updating to match context
 
   const toggleNotifications = () => setNotificationsEnabled(previousState => !previousState);
-
-  const onDateChange = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios');
-    setDate(currentDate);
-
-    if (selectedDate) {
-      const day = currentDate.getDate().toString().padStart(2, '0');
-      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-      const year = currentDate.getFullYear();
-      setDob(`${day} / ${month} / ${year} `);
-    }
-  };
 
   const handleLogout = () => {
     Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
@@ -51,73 +38,49 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}>
-        {/* Header Section (Editable Profile) */}
+        {/* Header Section (View Profile) */}
         <View className="bg-white dark:bg-gray-800 p-6 border-b border-gray-100 dark:border-gray-700 mb-6">
           <View className="items-center mb-6">
             <View className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full items-center justify-center overflow-hidden border border-gray-200 dark:border-gray-600">
               <User size={48} color={isDark ? "#9CA3AF" : "#9CA3AF"} />
             </View>
-            <TouchableOpacity className="mt-2">
-              <Text className="text-primary dark:text-blue-400 font-medium text-sm">Changer la photo</Text>
-            </TouchableOpacity>
+            {/* Name Display */}
+            <Text className="text-2xl font-bold text-gray-900 dark:text-white mt-4">{firstName} {lastName}</Text>
+            <Text className="text-gray-500 dark:text-gray-400">{email}</Text>
           </View>
 
-          {/* First Name Input */}
-          <View className="space-y-2 mb-5">
-            <Text className="text-gray-700 dark:text-gray-300 font-medium ml-1">Prénom</Text>
-            <View className="flex-row items-center bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 h-14 focus:border-blue-500 transition-all shadow-sm">
-              <MaterialCommunityIcons name="account-outline" size={24} color="#9CA3AF" />
-              <TextInput
-                className="flex-1 ml-3 text-gray-900 dark:text-white text-base"
-                placeholder="Votre prénom"
-                placeholderTextColor="#9CA3AF"
-                value={firstName}
-                onChangeText={setFirstName}
-              />
+          {/* Details Section */}
+          <View className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 space-y-4 mb-6">
+            <View className="flex-row items-center">
+              <MaterialCommunityIcons name="account-outline" size={20} color="#6B7280" />
+              <View className="ml-3">
+                <Text className="text-xs text-gray-500 dark:text-gray-400 uppercase">Nom complet</Text>
+                <Text className="text-gray-900 dark:text-white font-medium">{firstName} {lastName}</Text>
+              </View>
+            </View>
+            <View className="h-[1px] bg-gray-200 dark:bg-gray-800" />
+            <View className="flex-row items-center">
+              <MaterialCommunityIcons name="calendar-range" size={20} color="#6B7280" />
+              <View className="ml-3">
+                <Text className="text-xs text-gray-500 dark:text-gray-400 uppercase">Date de naissance</Text>
+                <Text className="text-gray-900 dark:text-white font-medium">{dob}</Text>
+              </View>
+            </View>
+            <View className="h-[1px] bg-gray-200 dark:bg-gray-800" />
+            <View className="flex-row items-center">
+              <Mail size={20} color="#6B7280" />
+              <View className="ml-3">
+                <Text className="text-xs text-gray-500 dark:text-gray-400 uppercase">Email</Text>
+                <Text className="text-gray-900 dark:text-white font-medium">{email}</Text>
+              </View>
             </View>
           </View>
 
-          {/* Last Name Input */}
-          <View className="space-y-2 mb-5">
-            <Text className="text-gray-700 dark:text-gray-300 font-medium ml-1">Nom</Text>
-            <View className="flex-row items-center bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 h-14 focus:border-blue-500 transition-all shadow-sm">
-              <MaterialCommunityIcons name="account-outline" size={24} color="#9CA3AF" />
-              <TextInput
-                className="flex-1 ml-3 text-gray-900 dark:text-white text-base"
-                placeholder="Votre nom"
-                placeholderTextColor="#9CA3AF"
-                value={lastName}
-                onChangeText={setLastName}
-              />
-            </View>
-          </View>
-
-          {/* Date of Birth Input */}
-          <View className="space-y-2 mb-5">
-            <Text className="text-gray-700 dark:text-gray-300 font-medium ml-1">Date de naissance</Text>
-            <Pressable
-              onPress={() => setShowDatePicker(true)}
-              className="flex-row items-center bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-4 h-14 active:bg-gray-100 dark:active:bg-gray-800 transition-all shadow-sm"
-            >
-              <Text className={`flex-1 text-base ${dob ? 'text-gray-900 dark:text-white' : 'text-gray-400'}`}>
-                {dob || 'JJ / MM / AAAA'}
-              </Text>
-              <MaterialCommunityIcons name="calendar-range" size={24} color="#9CA3AF" />
-            </Pressable>
-
-            {showDatePicker && (
-              <DateTimePicker
-                value={date}
-                mode="date"
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                onChange={onDateChange}
-                maximumDate={new Date()}
-              />
-            )}
-          </View>
-
-          <TouchableOpacity className="w-full bg-primary dark:bg-blue-600 h-12 rounded-xl items-center justify-center mt-2 shadow-sm">
-            <Text className="text-white font-bold text-lg">Enregistrer</Text>
+          <TouchableOpacity
+            onPress={() => router.push('/(drawer)/edit-profile')}
+            className="w-full bg-primary/10 dark:bg-blue-500/20 h-12 rounded-xl items-center justify-center border border-primary/20 dark:border-blue-500/30"
+          >
+            <Text className="text-primary dark:text-blue-400 font-bold text-lg">Modifier le profil</Text>
           </TouchableOpacity>
         </View>
 

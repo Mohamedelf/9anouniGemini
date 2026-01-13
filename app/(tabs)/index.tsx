@@ -7,9 +7,27 @@ import { ChatBubble } from '../../components/ChatBubble';
 import { LoadingBubble } from '../../components/LoadingBubble';
 
 export default function ChatScreen() {
-  const { messages, addMessage, isLoading, generateAiResponse } = useChatStore();
+  const {
+    addMessage,
+    isLoading,
+    generateAiResponse,
+    getCurrentConversation,
+    createConversation,
+    currentConversationId
+  } = useChatStore();
+
   const [inputText, setInputText] = useState('');
   const listRef = useRef<FlashList<any>>(null);
+
+  // Ensure conversation exists on mount
+  useEffect(() => {
+    if (!currentConversationId) {
+      createConversation();
+    }
+  }, [currentConversationId, createConversation]);
+
+  const conversation = getCurrentConversation();
+  const messages = conversation ? conversation.messages : [];
 
   // Inverted FlashList means index 0 is at the bottom.
   // We want the Newest message to be at index 0.
