@@ -22,36 +22,38 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
   return (
     <View
       className={clsx(
-        "max-w-[80%] rounded-2xl px-4 py-3 mb-3 relative group",
+        "mb-3 relative group",
         isUser
-          ? "bg-primary self-end rounded-tr-sm"
-          : "bg-gray-200 dark:bg-gray-700 self-start rounded-tl-sm"
+          ? "max-w-[80%] bg-primary self-end rounded-2xl rounded-tr-sm px-4 py-3"
+          : "w-full self-start py-2"
       )}
     >
       <Text
+        selectable={true}
+        selectionColor="rgba(0, 255, 255, 0.5)"
         className={clsx(
           "text-base leading-6",
-          isUser ? "text-white" : "text-gray-900 dark:text-gray-100"
+          isUser ? "text-white" : "text-gray-100 dark:text-gray-100"
         )}
       >
         {message.content}
       </Text>
 
       {!isUser && (
-        <View className="flex-row justify-end mt-2 pt-2 border-t border-gray-300 dark:border-gray-600">
+        <View className="flex-row justify-start mt-3 pt-2 border-t border-gray-700/30 dark:border-gray-700/30">
           <TouchableOpacity
             onPress={copyToClipboard}
             className="flex-row items-center gap-1 opacity-60 active:opacity-100"
           >
             {copied ? (
               <>
-                <Check size={14} color="#374151" />
-                <Text className="text-xs text-gray-700 dark:text-gray-300">Copié</Text>
+                <Check size={14} color="#9CA3AF" />
+                <Text className="text-xs text-gray-400 dark:text-gray-400">Copié</Text>
               </>
             ) : (
               <>
-                <Copy size={14} color="#374151" />
-                <Text className="text-xs text-gray-700 dark:text-gray-300">Copier</Text>
+                <Copy size={14} color="#9CA3AF" />
+                <Text className="text-xs text-gray-400 dark:text-gray-400">Copier</Text>
               </>
             )}
           </TouchableOpacity>

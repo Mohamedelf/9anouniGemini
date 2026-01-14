@@ -49,35 +49,10 @@ export default function ProfileScreen() {
             <Text className="text-gray-500 dark:text-gray-400">{email}</Text>
           </View>
 
-          {/* Details Section */}
-          <View className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 space-y-4 mb-6">
-            <View className="flex-row items-center">
-              <MaterialCommunityIcons name="account-outline" size={20} color="#6B7280" />
-              <View className="ml-3">
-                <Text className="text-xs text-gray-500 dark:text-gray-400 uppercase">Nom complet</Text>
-                <Text className="text-gray-900 dark:text-white font-medium">{firstName} {lastName}</Text>
-              </View>
-            </View>
-            <View className="h-[1px] bg-gray-200 dark:bg-gray-800" />
-            <View className="flex-row items-center">
-              <MaterialCommunityIcons name="calendar-range" size={20} color="#6B7280" />
-              <View className="ml-3">
-                <Text className="text-xs text-gray-500 dark:text-gray-400 uppercase">Date de naissance</Text>
-                <Text className="text-gray-900 dark:text-white font-medium">{dob}</Text>
-              </View>
-            </View>
-            <View className="h-[1px] bg-gray-200 dark:bg-gray-800" />
-            <View className="flex-row items-center">
-              <Mail size={20} color="#6B7280" />
-              <View className="ml-3">
-                <Text className="text-xs text-gray-500 dark:text-gray-400 uppercase">Email</Text>
-                <Text className="text-gray-900 dark:text-white font-medium">{email}</Text>
-              </View>
-            </View>
-          </View>
+
 
           <TouchableOpacity
-            onPress={() => router.push('/(drawer)/edit-profile')}
+            onPress={() => router.push('/edit-profile')}
             className="w-full bg-primary/10 dark:bg-blue-500/20 h-12 rounded-xl items-center justify-center border border-primary/20 dark:border-blue-500/30"
           >
             <Text className="text-primary dark:text-blue-400 font-bold text-lg">Modifier le profil</Text>

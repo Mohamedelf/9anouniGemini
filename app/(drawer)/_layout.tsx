@@ -71,13 +71,7 @@ export default function DrawerLayout() {
             ),
           }}
         />
-        <Drawer.Screen
-          name="edit-profile"
-          options={{
-            title: 'Modifier le profil',
-            drawerItemStyle: { display: 'none' }, // Hide from sidebar
-          }}
-        />
+
       </Drawer>
     </GestureHandlerRootView>
   );
