@@ -56,16 +56,16 @@ export default function ChatScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
       <View className="flex-1">
         {/* Header */}
-        <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100 bg-white">
+        <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900">
           <View className="flex-row items-center gap-2">
             <View className="w-8 h-8 bg-blue-100 rounded-full items-center justify-center">
               <Sparkles size={18} color="#007AFF" />
             </View>
             <View>
-              <Text className="text-lg font-bold text-gray-900">9anouni</Text>
+              <Text className="text-lg font-bold text-gray-900 dark:text-white">9anouni</Text>
             </View>
           </View>
         </View>
@@ -88,10 +88,10 @@ export default function ChatScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
         >
-          <View className="p-4 bg-white border-t border-gray-100">
-            <View className="flex-row items-end gap-2 bg-gray-50 p-2 rounded-2xl border border-gray-200">
+          <View className="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+            <View className="flex-row items-end gap-2 bg-gray-50 dark:bg-gray-800 p-2 rounded-2xl border border-gray-200 dark:border-gray-700">
               <TextInput
-                className="flex-1 text-base text-gray-900 max-h-32 px-2 py-2"
+                className="flex-1 text-base text-gray-900 dark:text-white max-h-32 px-2 py-2"
                 placeholder="Posez votre question juridique..."
                 placeholderTextColor="#9CA3AF"
                 multiline

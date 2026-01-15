@@ -33,7 +33,7 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
         selectionColor="rgba(0, 255, 255, 0.5)"
         className={clsx(
           "text-base leading-6",
-          isUser ? "text-white" : "text-gray-100 dark:text-gray-100"
+          isUser ? "text-white" : "text-gray-900 dark:text-gray-100"
         )}
       >
         {message.content}
